@@ -17,16 +17,20 @@ class MainActivity : AppCompatActivity() {
     var binding : ActivityMainBinding? =null
     var student_list = arrayListOf<student>()
     var baseAdapter = BaseAdapter(student_list)
+    lateinit var Studentdatabase: studentDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
+        Studentdatabase = studentDatabase.getInstance(this)
         student_list.add(student("Rohit","Java", 36.toString()))
         student_list.add(student("Vinay","Sql", 48.toString()))
         student_list.add(student("Pranay","Dsa", 12.toString()))
         student_list.add(student("Venkat","kotlin", 13.toString()))
+        binding?.fab?.setOnClickListener {
+            Studentdatabase.studentInterferce().Insertstudent(student(name  ="Test",subject ="Testing"))
+        }
 
         binding?.fab?.setOnClickListener{
             Dialog(this).apply {
