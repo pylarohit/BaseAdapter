@@ -3,7 +3,6 @@ package com.rohit.baseadapter
 import android.app.Dialog
 import android.os.Bundle
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -24,16 +23,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        student_list.add(student("Rohit","Java",36))
-        student_list.add(student("Vinay","Sql",48))
-        student_list.add(student("Pranay","Dsa",12))
-        student_list.add(student("Venkat","kotlin",13))
+        student_list.add(student("Rohit","Java", 36.toString()))
+        student_list.add(student("Vinay","Sql", 48.toString()))
+        student_list.add(student("Pranay","Dsa", 12.toString()))
+        student_list.add(student("Venkat","kotlin", 13.toString()))
 
         binding?.fab?.setOnClickListener{
             Dialog(this).apply {
                 setContentView(R.layout.custom_dialog)
                 window?.setLayout(900, 700)
-                
+                window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT )
                 val name = findViewById<EditText>(R.id.student_name)
                 val subject = findViewById<EditText>(R.id.student_Subject)
                 val rollnumber = findViewById<EditText>(R.id.student_rollNumber)
@@ -54,38 +53,38 @@ class MainActivity : AppCompatActivity() {
                         val name_1 = name.text.toString()
                         val subject_1 = subject.text.toString()
                         val rollnumber_1 = rollnumber.text.toString()
-
-                        addData(name_1,subject_1,rollnumber_1)
                         Toast.makeText(this@MainActivity,"Button Clicked", Toast.LENGTH_SHORT).show()
+                        student_list.add(student(name_1, subject_1,rollnumber_1))
+                        baseAdapter.notifyDataSetChanged()
+                        dismiss()
 
                     }
                 }
             }.show()
         }
         binding?.listView?.adapter = baseAdapter
-
         // listview update
         binding?.listView?.setOnItemClickListener { parent, view, position, id ->
-            Toast.makeText(this, "$position $id", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Update Clicked", Toast.LENGTH_SHORT).show()
             AlertDialog.Builder(this@MainActivity).apply {
-                setTitle("Tittle")
+                setTitle("Click To Update Data")
                 setPositiveButton("Update"){dialog,which ->
                     addNewData(data = position)
-                    update(data = position, data1 = "Sai" , data2 = "Maths" , data3 = "10",)
                 }
             }.show()
+
         }
         binding?.listView?.setOnItemLongClickListener { parent, view, position, id ->
             AlertDialog.Builder(this@MainActivity).apply {
-                setTitle("Tittle")
-                setPositiveButton("delete"){dialog,which ->
-                    deleteitem(position)
+                setTitle("Click To Delete Data")
+                setNegativeButton("Delete"){dialog,which ->
+                    student_list.removeAt(position)
+                    baseAdapter.notifyDataSetChanged()
                 }
             }.show()
             return@setOnItemLongClickListener true
         }
 
-        setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -120,27 +119,13 @@ class MainActivity : AppCompatActivity() {
                     val subject_data = Subject.text.toString()
                     val roll_number = rollNumber.text.toString()
 
-                    update(data ,name_data,subject_data,roll_number)
-
                     Toast.makeText(this@MainActivity,"button is preesed", Toast.LENGTH_SHORT).show()
                     dismiss()
+                    student_list.set(data , student(name_data, subject_data, roll_number))
+                    baseAdapter.notifyDataSetChanged()
                 }
             }
         }.show()
-
-    }
-    private fun deleteitem(data: Int) {
-        student_list.removeAt(data)
-        baseAdapter.notifyDataSetChanged()
     }
 
-    private fun update(data: Int, data1: String, data2: String, data3: String) {
-        student_list.set(data , student(name=data1, subject = data2, rollNumber = data3.toInt()))
-        baseAdapter.notifyDataSetChanged()
-    }
-
-    private fun addData(data1: String, data2: String, data3: String) {
-        student_list.add(student(name=data1, subject=data2, rollNumber =  data3.toInt()))
-        baseAdapter.notifyDataSetChanged()
-    }
 }

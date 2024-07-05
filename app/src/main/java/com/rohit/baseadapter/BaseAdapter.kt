@@ -27,15 +27,12 @@ class BaseAdapter(var list :ArrayList<student>) :BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = LayoutInflater.from(parent?.context).inflate(R.layout.base_item,parent,false)
 
-        //student name
         var studentname = view.findViewById<TextView>(R.id.studentName)
         studentname.setText(list[position].name)
 
-        //Roll number
         var rollnumber = view.findViewById<TextView>(R.id.studentRollNumber)
         rollnumber.setText(list[position].rollNumber.toString())
 
-        //student subject
         var studentsubject = view.findViewById<TextView>(R.id.studentSubject)
         studentsubject.setText(list[position].subject)
         return view

@@ -1,7 +1,7 @@
 package com.rohit.baseadapter
 
 class student(
-    var name : String?="",
+    var name: String?="",
     var subject: String?="",
-    var rollNumber :Int?=0
+    var rollNumber: String = 0.toString()
 )
