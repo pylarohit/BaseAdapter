@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class BaseAdapter(var list :ArrayList<student>) :BaseAdapter() {
+class BaseAdapter(var list :ArrayList<Student>) :BaseAdapter() {
     override fun getCount(): Int {
         return list.size
     }

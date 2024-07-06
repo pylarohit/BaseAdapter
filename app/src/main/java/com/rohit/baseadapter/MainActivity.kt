@@ -15,22 +15,20 @@ import com.rohit.baseadapter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     var binding : ActivityMainBinding? =null
-    var student_list = arrayListOf<student>()
+    var student_list = arrayListOf<Student>()
     var baseAdapter = BaseAdapter(student_list)
-    lateinit var Studentdatabase: studentDatabase
+    lateinit var studentdatabase: StudentDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        Studentdatabase = studentDatabase.getInstance(this)
-        student_list.add(student("Rohit","Java", 36.toString()))
-        student_list.add(student("Vinay","Sql", 48.toString()))
-        student_list.add(student("Pranay","Dsa", 12.toString()))
-        student_list.add(student("Venkat","kotlin", 13.toString()))
-        binding?.fab?.setOnClickListener {
-            Studentdatabase.studentInterferce().Insertstudent(student(name  ="Test",subject ="Testing"))
-        }
+        studentdatabase = StudentDatabase.getInstance(this)
+        /*student_list.add(Student("Rohit","Java", 36.toString()))
+        student_list.add(Student("Vinay","Sql", 48.toString()))
+        student_list.add(Student("Pranay","Dsa", 12.toString()))
+        student_list.add(Student("Venkat","kotlin", 13.toString()))*/
+
 
         binding?.fab?.setOnClickListener{
             Dialog(this).apply {
@@ -58,7 +56,9 @@ class MainActivity : AppCompatActivity() {
                         val subject_1 = subject.text.toString()
                         val rollnumber_1 = rollnumber.text.toString()
                         Toast.makeText(this@MainActivity,"Button Clicked", Toast.LENGTH_SHORT).show()
-                        student_list.add(student(name_1, subject_1,rollnumber_1))
+                    //    student_list.add(Student(name_1, subject_1,rollnumber_1))
+                        studentdatabase.studentInterferce().Insertstudent(Student(name  =name_1,subject =subject_1))
+                        getData()
                         baseAdapter.notifyDataSetChanged()
                         dismiss()
 
@@ -125,11 +125,15 @@ class MainActivity : AppCompatActivity() {
 
                     Toast.makeText(this@MainActivity,"button is preesed", Toast.LENGTH_SHORT).show()
                     dismiss()
-                    student_list.set(data , student(name_data, subject_data, roll_number))
+                //    student_list.set(data , Student(name_data, subject_data, roll_number))
                     baseAdapter.notifyDataSetChanged()
                 }
             }
         }.show()
+    }
+    fun getData(){
+        student_list.addAll(studentdatabase?.studentInterferce()?.getList()?: arrayListOf())
+        baseAdapter.notifyDataSetChanged()
     }
 
 }
